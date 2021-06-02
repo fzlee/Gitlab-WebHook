@@ -1,32 +1,45 @@
 package wecom
 
-import "github.com/gin-gonic/gin"
+import (
+	"gitlab_webhook/utils"
 
-acceptedHooks = []string{
-	"Push Hook",
-	"Merge Request Hook",
-	"Pipeline Hook",
-	"Job Hook",
-	"Deployment Hook",
-	"Release Hook"
-}
+	"github.com/gin-gonic/gin"
+)
 
-func stringInArray(a String, b []String) boolean {
-	for _, item := range b {
-		if a == b {
+func stringInMap(a string, maps map[string]func(*gin.Context)) bool {
+	for item, _ := range maps {
+		if a == item {
 			return true
 		}
 	}
 	return false
 }
 
-
 func Ping(c *gin.Context) {
-	pushType := c.Request.Header["X-Gitlab-Event"]
-	if stringInArray(pushType, acceptedHooks) {
-		return c.JSON(200, gin.H{
-			"sucecss": false,
-			"message": "unknown header X-Gitlab-Event"
-		})
+	pushTypes := c.Request.Header["X-Gitlab-Event"]
+	pushType := utils.GetFirstItem(pushTypes)
+
+	if pushType == nil {
+		utils.FailedResponse(c, "empty header X-Gitlab-Event")
+		return
 	}
+
+	maps := map[string]func(c *gin.Context){
+		"Push Hook":          handlePushHook,
+		"Merge Request Hook": handlePushHook,
+		"Pipeline Hook":      handlePushHook,
+		"Job Hook":           handlePushHook,
+		"Deployment Hook":    handlePushHook,
+		"Release Hook":       handlePushHook,
+	}
+
+	if pushType == nil || !stringInMap(*pushType, maps) {
+		utils.FailedResponse(c, "unknown header X-Gitlab-Event: "+*pushType)
+		return
+	}
+
+	// handle webhook
+	maps[*pushType](c)
+
+	utils.SuccessResponse(c)
 }
