@@ -5,7 +5,6 @@ name: CI
 on:
   push:
     tags:
-    tags:
       - 'v*.*.*'
 
 jobs:
