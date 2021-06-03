@@ -2,7 +2,7 @@ FROM golang:1.16.4-alpine3.13 as builder
 RUN mkdir /app
 ADD . /app
 WORKDIR /app
-RUN go build -tags=nomsgpack -o main .
+RUN export GIN_MODE=release go build -tags=nomsgpack -o main .
 
 FROM alpine:3.13.5
 
