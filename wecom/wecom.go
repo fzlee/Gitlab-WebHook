@@ -27,7 +27,7 @@ func Ping(c *gin.Context) {
 	maps := map[string]func(c *gin.Context){
 		"Push Hook":          handlePushHook,
 		"Merge Request Hook": handlePushHook,
-		"Pipeline Hook":      handlePushHook,
+		"Pipeline Hook":      handlePipelineHook,
 		"Job Hook":           handlePushHook,
 		"Deployment Hook":    handlePushHook,
 		"Release Hook":       handlePushHook,

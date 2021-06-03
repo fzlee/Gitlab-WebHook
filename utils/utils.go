@@ -2,6 +2,8 @@ package utils
 
 import "github.com/gin-gonic/gin"
 
+var WECOM_TOKEN *string
+
 func GetFirstItem(items []string) *string {
 	if len(items) == 0 {
 		return nil
