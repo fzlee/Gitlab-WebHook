@@ -11,8 +11,6 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-    runs-on: ubuntu-latest
-    steps:
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
