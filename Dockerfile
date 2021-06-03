@@ -3,7 +3,7 @@ RUN mkdir /app
 ADD . /app
 WORKDIR /app
 ENV GIN_MODE=release 
-RUN go build -tags=nomsgpack -o main .
+RUN GIN_MODE=release go build -tags=nomsgpack -o main .
 
 FROM alpine:3.13.5
 
